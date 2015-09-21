@@ -40,10 +40,10 @@ func Memory() (memory Mem) {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		if freeMatch.MatchString(scanner.Text()) {
-			memory.Free = strings.TrimSpace(scanner.Text())
+			memory.Free = strings.Trim(strings.Split(scanner.Text(), ":")[1], " ")
 		}
 		if totalMatch.MatchString(scanner.Text()) {
-			memory.Total = strings.TrimSpace(scanner.Text())
+			memory.Total = strings.Trim(strings.Split(scanner.Text(), ":")[1], " ")
 		}
 	}
 	return memory

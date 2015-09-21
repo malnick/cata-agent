@@ -14,21 +14,26 @@ import (
 // Define flags
 var verbose = flag.Bool("v", false, "Define verbose logging output.")
 
+// The container index
 func indexContainer(w http.ResponseWriter, r *http.Request) {
-	log.Debug("Starting /container index")
+	log.Debug("Request for /container index")
 	fmt.Println("Container Index")
 }
 
+// The host index
 func indexHost(w http.ResponseWriter, r *http.Request) {
-	log.Debug("Starting /host route")
+	log.Debug("Requets for /host index")
 	fmt.Println("Host index")
 }
 
+// The hostname route
 func routeHostname(w http.ResponseWriter, r *http.Request) {
-	log.Debug("Starting /host/hostname route")
+	log.Debug("Request for /host/hostname route")
+	// Hostname struct for return
 	var p struct {
 		Hostname string `json:"hostname"`
 	}
+	// Use our library to get the hostname of the current host
 	p.Hostname = host.Hostname()
 	if err := json.NewEncoder(w).Encode(p); err != nil {
 		log.Debug("failed to encode json for hostname")
@@ -36,8 +41,9 @@ func routeHostname(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// The root index
 func Index(w http.ResponseWriter, r *http.Request) {
-	log.Debug("Starting / index")
+	log.Debug("Request for / index")
 	fmt.Fprintf(w, "Cata Agent Started on /")
 }
 
@@ -56,9 +62,10 @@ func main() {
 	router := mux.NewRouter().StrictSlash(true)
 	// Root index
 	router.HandleFunc("/", Index)
-	log.Fatal(http.ListenAndServe(":8080", router))
 	// Host index
 	router.HandleFunc("/host", indexHost)
 	// /container index
-	http.HandleFunc("/host/hostname", routeHostname)
+	router.HandleFunc("/host/hostname", routeHostname)
+	// Handle a failover
+	log.Fatal(http.ListenAndServe(":8080", router))
 }

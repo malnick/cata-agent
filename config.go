@@ -13,7 +13,6 @@ type Alarm struct {
 	Critical int    `json:"critical"`
 	Warning  int    `json:"warning"`
 	Ok       int    `json:"ok"`
-	Unknown  int    `json:"unknown"`
 }
 
 type Config struct {

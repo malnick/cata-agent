@@ -36,4 +36,10 @@ var routes = Routes{
 		"/host/memory",
 		routeHostMemory,
 	},
+	Route{
+		"HostCpu",
+		"GET",
+		"/host/cpu",
+		routeHostCpu,
+	},
 }

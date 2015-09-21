@@ -44,6 +44,15 @@ func routeHostMemory(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// CPU route
+func routeHostCpu(w http.ResponseWriter, r *http.Request) {
+	log.Debug("Request to /host/cpu route")
+	cpu := utils.Cpu()
+	if err := json.NewEncoder(w).Encode(cpu); err != nil {
+		log.Debug("Failed to encode json for cpu")
+	}
+}
+
 // The root index
 func Index(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request for / index")

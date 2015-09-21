@@ -2,9 +2,9 @@ package utils
 
 import (
 	log "github.com/Sirupsen/logrus"
-	"github.com/shirou/gopsutil/cpu"
-	"github.com/shirou/gopsutil/load"
-	"github.com/shirou/gopsutil/mem"
+	"github.com/malnick/gopsutil/cpu"
+	"github.com/malnick/gopsutil/load"
+	"github.com/malnick/gopsutil/mem"
 
 	"io/ioutil"
 )

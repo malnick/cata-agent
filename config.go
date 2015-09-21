@@ -4,6 +4,8 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"os"
 	"regexp"
+	"strconv"
+	"strings"
 )
 
 type Alarm struct {
@@ -26,8 +28,14 @@ func GetAlarms() (alarms []Alarm) {
 		if matchEnv.MatchString(e) {
 			var newAlarm Alarm
 			log.Debug("New alarm: ", e)
-			newAlarm.Name = e
-			// Add here
+			newAlarm.Name = strings.Split(strings.Split(e, "=")[0], "CATA_ALARM_")[1]
+			// Crit value is first in list
+			crit, _ := strconv.Atoi(strings.Split(strings.Split(e, "=")[1], ",")[0])
+			warn, _ := strconv.Atoi(strings.Split(strings.Split(e, "=")[1], ",")[1])
+			ok, _ := strconv.Atoi(strings.Split(strings.Split(e, "=")[1], ",")[2])
+			newAlarm.Critical = crit
+			newAlarm.Warning = warn
+			newAlarm.Ok = ok
 			alarms = append(alarms, newAlarm)
 		}
 	}

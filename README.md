@@ -2,22 +2,39 @@
 Container Data. Agent used by Cata service.
 
 ## Overview
-Cata is a web service that listens for POSTs from distributed cata-agents running as containers on each docker host in your infrastructure. Cata agents return data about each host: 
+Cata is a framework consiting of "agents" and a "console". The cata-agent resides on your host machines for your docker infrastructure runs. The cata-agent then exposes the system on each host (memory, storage, CPU usage as well as Docker inspect data) and exposes a REST API to the Cata-console to ingest. 
 
-#### Memory Usage
-1. Memory available
-1. Memory being used by containers by container-name/hash
+Cata-agents can be configured with host-level alarms using environment variables. These alarms allow quick configuration of basic monitoring requirements. 
 
-#### CPU Usage
-1. CPU available on each host
-1. CPU being used by containers 
+## Alarms
+Alarms can be set with env variables, executed with the docker daemon as such:
 
-#### Storage
-1. Storage available on host
-1. Storage being used by container (aufs, diff, etc); by directory so you can quickly get insights to where the data is filling up.
+```
+docker run -d -e 'CATA_ALARM_MEMORY=90,70,50' -e 'CATA_ALARM_CPU=80,60,40' yourorg/cata_agent:latest
+```
 
-#### Container Data
-1. Volumes mounts
-1. Docker Inspect Output (/container/$id/inspect)
+The cata-agent reads in the list of values from the alarm, setting basic 'critical', 'warning' and 'ok' requirements for each alarm. 
 
+### Available Alarms
+MEMORY
+CPU
+STORAGE
 
+## REST Interface
+The cata-agent exposes a basic REST interface for your host. 
+
+```/```: The basic configuration for the cata-agent
+
+#### Host Index
+```/host```: Host data
+
+```/host/cpu```: CPU data
+
+```/host/load```: Load data
+
+```/host/memory```: Host memory
+
+```/host/storage```: Host storage
+
+#### Container Index
+```/containers```: Container data

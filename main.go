@@ -11,16 +11,12 @@ import (
 var verbose = flag.Bool("v", false, "Define verbose logging output.")
 
 func main() {
+	// Parse flags
 	flag.Parse()
-	// Debug level
-	log.SetLevel(log.DebugLevel)
-	if *verbose {
-		log.Debug("Loglevel: Debug")
-	} else {
-		log.SetLevel(log.InfoLevel)
-		log.Info("Loglevel: Info")
-	}
-
+	// Parse the config here before doing anything else
+	_ = ParseConfig()
+	// Run the router
 	router := NewRouter()
+	// Handle a failure
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

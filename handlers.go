@@ -66,4 +66,8 @@ func routeHostLoad(w http.ResponseWriter, r *http.Request) {
 func Index(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request for / index")
 	fmt.Fprintf(w, "Cata Agent Started on /")
+	config := ParseConfig()
+	if err := json.NewEncoder(w).Encode(config); err != nil {
+		log.Debug("Failed to encode configuration for cata agent")
+	}
 }

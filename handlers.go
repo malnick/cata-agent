@@ -53,6 +53,15 @@ func routeHostCpu(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Host load
+func routeHostLoad(w http.ResponseWriter, r *http.Request) {
+	log.Debug("Request to /host/load route")
+	load := utils.Load()
+	if err := json.NewEncoder(w).Encode(load); err != nil {
+		log.Debug("Failed to encode json for load")
+	}
+}
+
 // The root index
 func Index(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request for / index")

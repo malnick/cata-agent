@@ -42,4 +42,10 @@ var routes = Routes{
 		"/host/cpu",
 		routeHostCpu,
 	},
+	Route{
+		"HostLoad",
+		"GET",
+		"/host/load",
+		routeHostLoad,
+	},
 }

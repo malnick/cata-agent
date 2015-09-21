@@ -32,13 +32,16 @@ func routeHostname(w http.ResponseWriter, r *http.Request) {
 	p.Hostname = utils.Hostname()
 	if err := json.NewEncoder(w).Encode(p); err != nil {
 		log.Debug("failed to encode json for hostname")
-		panic(err)
 	}
 }
 
 // Memory route
-func hostMemory(w http.ResponseWriter, r *http.Request) {
+func routeHostMemory(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request to /host/memory route")
+	mem := utils.Memory()
+	if err := json.NewEncoder(w).Encode(mem); err != nil {
+		log.Debug("Failed to encode json for memory")
+	}
 }
 
 // The root index

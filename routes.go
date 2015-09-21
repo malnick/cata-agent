@@ -25,9 +25,15 @@ var routes = Routes{
 		indexHost,
 	},
 	Route{
-		"Hostname",
+		"HostHostname",
 		"GET",
 		"/host/hostname",
 		routeHostname,
+	},
+	Route{
+		"HostMemory",
+		"GET",
+		"/host/memory",
+		routeHostMemory,
 	},
 }

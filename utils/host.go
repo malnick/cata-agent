@@ -1,9 +1,18 @@
 package utils
 
 import (
+	"bufio"
+	log "github.com/Sirupsen/logrus"
 	"io/ioutil"
+	"os"
 	"regexp"
+	"strings"
 )
+
+type Mem struct {
+	Free  string `json:"free"`
+	Total string `json:"total"`
+}
 
 func Hosts() string {
 	h, _ := ioutil.ReadFile("/etc/hosts")
@@ -15,31 +24,26 @@ func Hostname() string {
 	return string(h)
 }
 
-type Mem struct {
-	Free  string
-	Total string
-}
-
 func Memory() (memory Mem) {
-	freeMatch := regexp.Compile("MemFree:*")
-	totalMatch := regexp.Compile("MemTotal:*")
+	freeMatch, _ := regexp.Compile("MemFree:*")
+	totalMatch, _ := regexp.Compile("MemTotal:*")
 	file, err := os.Open("/proc/meminfo")
 	if err != nil {
 		log.Debug("Failed to open /proc/meminfo")
-		return memory{
-			"Failed to open /proc/meminfo",
-			"Failed to open /proc/meminfo",
-		}
+		msg := "Failed to open /proc/meminfo"
+		memory.Free = msg
+		memory.Total = msg
+		return memory
 	}
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		if freeMatch.MatchString(scanner.Text()) {
-			memory.Free = scanner.Text()
+			memory.Free = strings.TrimSpace(scanner.Text())
 		}
 		if totalMatch.MatchString(scanner.Text()) {
-			memory.Total = scanner.Text()
+			memory.Total = strings.TrimSpace(scanner.Text())
 		}
 	}
 	return memory

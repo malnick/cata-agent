@@ -47,7 +47,7 @@ func startAgent(c Config) {
 	for {
 	Inner:
 		for _, console := range c.Consoles {
-			url := strings.Join([]string{"http://", console, ":", c.ConsolePort}, "")
+			url := strings.Join([]string{"http://", console, ":", c.ConsolePort, "/agent"}, "")
 			log.Debug("POSTing to URL: ", url)
 			// JSON Post
 			json, _ := json.Marshal(getData())

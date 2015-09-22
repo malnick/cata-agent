@@ -8,38 +8,19 @@ import (
 	"github.com/malnick/gopsutil/mem"
 )
 
-type MemData struct {
-	Free           uint64  `json:"free"`
-	Total          uint64  `json:"total"`
-	PercentageUsed float64 `json:"percentage_used"`
-	Alarm          string  `json:"alarm"`
-}
-
-type CpuData struct {
-	CpuInfo []cpu.CPUInfoStat `json:"cpu_info"`
-}
-
-type HostData struct {
-	Data *host.HostInfoStat
-}
-
 func HostInfo() *host.HostInfoStat {
 	h, _ := host.HostInfo()
 	return h
 }
 
-func Memory() (memory MemData) {
-	v, _ := mem.VirtualMemory()
-	memory.Free = v.Free
-	memory.Total = v.Total
-	memory.PercentageUsed = v.UsedPercent
+func Memory() *mem.VirtualMemoryStat {
+	memory, _ := mem.VirtualMemory()
 	return memory
 }
 
-func Cpu() (cpuData CpuData) {
+func Cpu() []cpu.CPUInfoStat {
 	c, _ := cpu.CPUInfo()
-	cpuData.CpuInfo = c
-	return cpuData
+	return c
 }
 
 func Load() *load.LoadAvgStat {

@@ -18,7 +18,7 @@ Cata-agents can be configured with host-level alarms using environment variables
 
   A string to define the port the console listens on. Applied to all consoles in list. Defaults to 9000.
 
-```CATA_POST_SPLAY=```: int
+```CATA_POST_SPLAY=```: string - NOT YET IMPLEMENTED
 
   An integer representing POST splay in minutes. Default is 5.
 

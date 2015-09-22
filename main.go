@@ -14,9 +14,10 @@ func main() {
 	flag.Parse()
 	// Parse the config here before doing anything else
 	config := ParseConfig()
+	// Start the agent
+	go startAgent(config)
 	// Run the router
 	router := NewRouter()
 	// Handle a failure
 	log.Fatal(http.ListenAndServe(":8080", router))
-	startAgent(config)
 }

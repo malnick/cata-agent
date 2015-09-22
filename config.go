@@ -23,9 +23,7 @@ type Config struct {
 	ConsolePort string   `json:"console_port"`
 }
 
-func ParseEnv() Config {
-	// The local instance of config
-	var c Config
+func ParseEnv(c Config) Config {
 	// Create a few matches for our env parsing down the road
 	matchEnv, _ := regexp.Compile("CATA_ALARM_*")
 	matchConsole, _ := regexp.Compile("CATA_CONSOLES=*")
@@ -36,32 +34,29 @@ func ParseEnv() Config {
 			var newAlarm Alarm
 			log.Debug("New alarm: ", e)
 			newAlarm.Name = strings.Split(strings.Split(e, "=")[0], "CATA_ALARM_")[1]
-			// Crit value is first in list
+			//	Crit value is first in list
 			crit, _ := strconv.Atoi(strings.Split(strings.Split(e, "=")[1], ",")[0])
 			warn, _ := strconv.Atoi(strings.Split(strings.Split(e, "=")[1], ",")[1])
 			ok, _ := strconv.Atoi(strings.Split(strings.Split(e, "=")[1], ",")[2])
 			newAlarm.Critical = crit
 			newAlarm.Warning = warn
 			newAlarm.Ok = ok
-			alarms = append(alarms, newAlarm)
-			c.Alarms = alarms
+			c.Alarms = append(c.Alarms, newAlarm)
 		}
 		// Get the consoles from the env
 		if matchConsole.MatchString(e) {
-				consolesAry := strings.Split(strings.Split(e, "=")[1], ",")
-				for _, console := range consolesAry {
-					c.Consoles = append(c.Consoles, string(console))
-				}
+			consolesAry := strings.Split(strings.Split(e, "=")[1], ",")
+			for _, console := range consolesAry {
+				c.Consoles = append(c.Consoles, string(console))
 			}
 		}
 		// If the consoles were not passed, set a default
-		if len(consoles) < 1 {
+		if len(c.Consoles) < 1 {
 			c.Consoles = append(c.Consoles, "localhost")
 		}
 		// get ports from the env
 		if matchPort.MatchString(e) {
-			consolePort = strings.Split(e, "=")[1]
-			c.ConsolePort = consolePort
+			c.ConsolePort = strings.Split(e, "=")[1]
 		}
 		// if ports not passed, set a default
 		if len(c.ConsolePort) < 1 {
@@ -84,6 +79,6 @@ func ParseConfig() (c Config) {
 		log.Info("Loglevel: Info")
 		c.LogLevel = "Info"
 	}
-	c = ParseEnv()
+	c = ParseEnv(c)
 	return c
 }

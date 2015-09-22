@@ -1,7 +1,7 @@
 package utils
 
 import (
-	log "github.com/Sirupsen/logrus"
+	//	log "github.com/Sirupsen/logrus"
 	"github.com/malnick/gopsutil/cpu"
 	"github.com/malnick/gopsutil/load"
 	"github.com/malnick/gopsutil/mem"
@@ -26,14 +26,11 @@ func Hostname() string {
 	return string(h)
 }
 
-func Memory(alarm string) (memory Mem) {
+func Memory() (memory Mem) {
 	v, _ := mem.VirtualMemory()
 	memory.Free = v.Free
 	memory.Total = v.Total
 	memory.PercentageUsed = v.UsedPercent
-	if len(alarm) > 0 {
-		memory.Alarm = MemoryAlarm(int(memory.PercentageUsed), alarm)
-	}
 	return memory
 }
 

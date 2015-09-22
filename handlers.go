@@ -42,8 +42,8 @@ func routeHostMemory(w http.ResponseWriter, r *http.Request) {
 	mem := utils.Memory()
 	for _, metric := range config.Alarms {
 		if metric.Name == "MEMORY" {
-			log.Debug("MEMORY Alarm found: ", metric.Alarm, mem)
-			mem.Alarm = MemoryAlarm(mem, metric.Alarm)
+			log.Debug("MEMORY Alarm found: ", metric, mem)
+			mem.Alarm = MemoryAlarm(int(mem.PercentageUsed), metric)
 		}
 	}
 	if err := json.NewEncoder(w).Encode(mem); err != nil {

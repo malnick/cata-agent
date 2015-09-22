@@ -6,7 +6,19 @@ Cata is a framework consiting of "agents" and a "console". The cata-agent reside
 
 Cata-agents can be configured with host-level alarms using environment variables. These alarms allow quick configuration of basic monitoring requirements. 
 
-## Alarms
+## ENV Config
+
+```CATA_CONSOLES=```: []string 
+  
+  An array of consoles to post data. Example: ```CATA_CONSOLE=my.console1,my.console2```
+
+  Defualt is ```localhost```.
+
+```CATA_POST_SPLAY=```: int
+
+  An integer representing POST splay in minutes. Default is 5.
+
+## Alarms - NOT FULLY IMPLEMENTED
 Alarms can be set with env variables, executed with the docker daemon as such:
 
 ```
@@ -15,7 +27,7 @@ docker run -d -e 'CATA_ALARM_MEMORY=90,70,50' -e 'CATA_ALARM_CPU=80,60,40' youro
 
 The cata-agent reads in the list of values from the alarm, setting basic 'critical', 'warning' and 'ok' requirements for each alarm. 
 
-### Available Alarms
+#### Available Alarms
 MEMORY
 CPU
 STORAGE

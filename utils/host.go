@@ -6,8 +6,6 @@ import (
 	"github.com/malnick/gopsutil/host"
 	"github.com/malnick/gopsutil/load"
 	"github.com/malnick/gopsutil/mem"
-
-	"io/ioutil"
 )
 
 type MemData struct {

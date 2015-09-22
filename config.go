@@ -16,9 +16,10 @@ type Alarm struct {
 }
 
 type Config struct {
-	Name     string  `json:"name"`
-	LogLevel string  `json:"log_level"`
-	Alarms   []Alarm `json:"alarms"`
+	Name     string   `json:"name"`
+	LogLevel string   `json:"log_level"`
+	Alarms   []Alarm  `json:"alarms"`
+	Consoles []string `json:"consoles"`
 }
 
 func GetAlarms() (alarms []Alarm) {
@@ -41,6 +42,22 @@ func GetAlarms() (alarms []Alarm) {
 	return alarms
 }
 
+func GetConsoles() (consoles []string) {
+	matchConsole, _ := regexp.Compile("CATA_CONSOLES=*")
+	for _, c := range os.Environ() {
+		if matchConsole.MatchString(c) {
+			consolesAry := strings.Split(strings.Split(c, "=")[1], ",")
+			for _, console := range consolesAry {
+				consoles = append(consoles, string(console))
+			}
+		}
+	}
+	if len(consoles) < 1 {
+		consoles = append(consoles, "localhost")
+	}
+	return
+}
+
 func ParseConfig() (c Config) {
 	log.SetLevel(log.DebugLevel)
 	if *verbose {
@@ -57,6 +74,8 @@ func ParseConfig() (c Config) {
 	c.Name = "Cata Agent : Configuration"
 
 	c.Alarms = GetAlarms()
+
+	c.Consoles = GetConsoles()
 
 	return c
 }

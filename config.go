@@ -16,14 +16,21 @@ type Alarm struct {
 }
 
 type Config struct {
-	Name     string   `json:"name"`
-	LogLevel string   `json:"log_level"`
-	Alarms   []Alarm  `json:"alarms"`
-	Consoles []string `json:"consoles"`
+	Name        string   `json:"name"`
+	LogLevel    string   `json:"log_level"`
+	Alarms      []Alarm  `json:"alarms"`
+	Consoles    []string `json:"consoles"`
+	ConsolePort string   `json:"console_port"`
 }
 
-func GetAlarms() (alarms []Alarm) {
+func ParseEnv() Config {
+	// The local instance of config
+	var c Config
+	// Create a few matches for our env parsing down the road
 	matchEnv, _ := regexp.Compile("CATA_ALARM_*")
+	matchConsole, _ := regexp.Compile("CATA_CONSOLES=*")
+	matchPort, _ := regexp.Compile("CATA_CONSOLE_PORT=*")
+	// Parse the env for our config
 	for _, e := range os.Environ() {
 		if matchEnv.MatchString(e) {
 			var newAlarm Alarm
@@ -37,25 +44,31 @@ func GetAlarms() (alarms []Alarm) {
 			newAlarm.Warning = warn
 			newAlarm.Ok = ok
 			alarms = append(alarms, newAlarm)
+			c.Alarms = alarms
 		}
-	}
-	return alarms
-}
-
-func GetConsoles() (consoles []string) {
-	matchConsole, _ := regexp.Compile("CATA_CONSOLES=*")
-	for _, c := range os.Environ() {
-		if matchConsole.MatchString(c) {
-			consolesAry := strings.Split(strings.Split(c, "=")[1], ",")
-			for _, console := range consolesAry {
-				consoles = append(consoles, string(console))
+		// Get the consoles from the env
+		if matchConsole.MatchString(e) {
+				consolesAry := strings.Split(strings.Split(e, "=")[1], ",")
+				for _, console := range consolesAry {
+					c.Consoles = append(c.Consoles, string(console))
+				}
 			}
 		}
+		// If the consoles were not passed, set a default
+		if len(consoles) < 1 {
+			c.Consoles = append(c.Consoles, "localhost")
+		}
+		// get ports from the env
+		if matchPort.MatchString(e) {
+			consolePort = strings.Split(e, "=")[1]
+			c.ConsolePort = consolePort
+		}
+		// if ports not passed, set a default
+		if len(c.ConsolePort) < 1 {
+			c.ConsolePort = "9000"
+		}
 	}
-	if len(consoles) < 1 {
-		consoles = append(consoles, "localhost")
-	}
-	return
+	return c
 }
 
 func ParseConfig() (c Config) {
@@ -71,11 +84,6 @@ func ParseConfig() (c Config) {
 		log.Info("Loglevel: Info")
 		c.LogLevel = "Info"
 	}
-	c.Name = "Cata Agent : Configuration"
-
-	c.Alarms = GetAlarms()
-
-	c.Consoles = GetConsoles()
-
+	c = ParseEnv()
 	return c
 }

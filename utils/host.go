@@ -30,11 +30,6 @@ func HostInfo() *host.HostInfoStat {
 	return h
 }
 
-func Hostname() string {
-	h, _ := ioutil.ReadFile("/etc/hostname")
-	return string(h)
-}
-
 func Memory() (memory MemData) {
 	v, _ := mem.VirtualMemory()
 	memory.Free = v.Free

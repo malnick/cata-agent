@@ -7,7 +7,7 @@ type Route struct {
 	Method      string
 	Pattern     string
 	HandlerFunc http.HandlerFunc
-	Alert       string
+	//Alert       string
 }
 
 type Routes []Route
@@ -24,12 +24,6 @@ var routes = Routes{
 		"GET",
 		"/host",
 		indexHost,
-	},
-	Route{
-		"HostHostname",
-		"GET",
-		"/host/hostname",
-		routeHostname,
 	},
 	Route{
 		"HostMemory",

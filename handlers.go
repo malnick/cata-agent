@@ -37,8 +37,15 @@ func routeHostname(w http.ResponseWriter, r *http.Request) {
 
 // Memory route
 func routeHostMemory(w http.ResponseWriter, r *http.Request) {
+	config := ParseConfig()
 	log.Debug("Request to /host/memory route")
 	mem := utils.Memory()
+	for _, metric := range config.Alarms {
+		if metric.Name == "MEMORY" {
+			log.Debug("MEMORY Alarm found: ", metric.Alarm, mem)
+			mem.Alarm = MemoryAlarm(mem, metric.Alarm)
+		}
+	}
 	if err := json.NewEncoder(w).Encode(mem); err != nil {
 		log.Debug("Failed to encode json for memory")
 	}
@@ -65,7 +72,6 @@ func routeHostLoad(w http.ResponseWriter, r *http.Request) {
 // The root index
 func Index(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request for / index")
-	fmt.Fprintf(w, "Cata Agent Started on /")
 	config := ParseConfig()
 	if err := json.NewEncoder(w).Encode(config); err != nil {
 		log.Debug("Failed to encode configuration for cata agent")

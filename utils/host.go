@@ -13,6 +13,7 @@ type Mem struct {
 	Free           uint64  `json:"free"`
 	Total          uint64  `json:"total"`
 	PercentageUsed float64 `json:"percentage_used"`
+	Alarm          string  `json:"alarm"`
 }
 
 func Hosts() string {
@@ -25,12 +26,14 @@ func Hostname() string {
 	return string(h)
 }
 
-func Memory() (memory Mem) {
+func Memory(alarm string) (memory Mem) {
 	v, _ := mem.VirtualMemory()
 	memory.Free = v.Free
 	memory.Total = v.Total
 	memory.PercentageUsed = v.UsedPercent
-	log.Debug(memory)
+	if len(alarm) > 0 {
+		memory.Alarm = MemoryAlarm(int(memory.PercentageUsed), alarm)
+	}
 	return memory
 }
 

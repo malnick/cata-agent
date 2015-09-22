@@ -32,7 +32,7 @@ func ParseEnv(c Config) Config {
 	for _, e := range os.Environ() {
 		if matchEnv.MatchString(e) {
 			var newAlarm Alarm
-			log.Debug("New alarm: ", e)
+			log.Debug("New alarm found: ", e)
 			newAlarm.Name = strings.Split(strings.Split(e, "=")[0], "CATA_ALARM_")[1]
 			//	Crit value is first in list
 			crit, _ := strconv.Atoi(strings.Split(strings.Split(e, "=")[1], ",")[0])
@@ -45,23 +45,27 @@ func ParseEnv(c Config) Config {
 		}
 		// Get the consoles from the env
 		if matchConsole.MatchString(e) {
+			log.Debug("Found Cata Console Match: ", e)
 			consolesAry := strings.Split(strings.Split(e, "=")[1], ",")
 			for _, console := range consolesAry {
 				c.Consoles = append(c.Consoles, string(console))
 			}
 		}
-		// If the consoles were not passed, set a default
-		if len(c.Consoles) < 1 {
-			c.Consoles = append(c.Consoles, "localhost")
-		}
 		// get ports from the env
 		if matchPort.MatchString(e) {
+			log.Debug("Port match found: ", e)
 			c.ConsolePort = strings.Split(e, "=")[1]
 		}
-		// if ports not passed, set a default
-		if len(c.ConsolePort) < 1 {
-			c.ConsolePort = "9000"
-		}
+	}
+	// If the consoles were not passed, set a default
+	if len(c.Consoles) < 1 {
+		log.Debug("Consoles not found, setting default to localhost")
+		c.Consoles = append(c.Consoles, "localhost")
+	}
+	// if ports not passed, set a default
+	if len(c.ConsolePort) < 1 {
+		log.Debug("Port match empty, setting default to 9000")
+		c.ConsolePort = "9000"
 	}
 	return c
 }

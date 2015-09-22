@@ -12,6 +12,7 @@ import (
 func startAgent(c Config) {
 	log.Debug("Starting cata agent")
 	for {
+	Inner:
 		for _, console := range c.Consoles {
 			url := strings.Join([]string{"http://", console, ":", c.ConsolePort}, "")
 			log.Debug("POSTing to URL: ", url)
@@ -24,7 +25,7 @@ func startAgent(c Config) {
 			resp, err := client.Do(req)
 			if err != nil {
 				log.Warn("Failed to POST to ", url)
-				break
+				continue Inner
 			}
 			defer resp.Body.Close() // Sleep for 1 minute before next POST
 			log.Debug("Response Status: ", resp.Status)

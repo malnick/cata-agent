@@ -3,11 +3,44 @@ package main
 import (
 	"bytes"
 	log "github.com/Sirupsen/logrus"
+	"github.com/malnick/gopsutil/cpu"
+	//"github.com/malnick/gopsutil/disk"
+	"encoding/json"
+	"github.com/malnick/gopsutil/docker"
+	"github.com/malnick/gopsutil/host"
+	"github.com/malnick/gopsutil/load"
+	"github.com/malnick/gopsutil/mem"
 	"io/ioutil"
 	"net/http"
 	"strings"
 	"time"
 )
+
+type PostData struct {
+	Memory *mem.VirtualMemoryStat `json:"memory"`
+	CPU    []cpu.CPUInfoStat      `json:"cpu"`
+	Host   *host.HostInfoStat     `json:"host"`
+	Load   *load.LoadAvgStat      `json:"load"`
+	//Disk      *disk.DiskUsageStat    `json:"disk"`
+	DockerIds []string `json:"docker_ids"`
+}
+
+func getData() PostData {
+	memory, _ := mem.VirtualMemory()
+	cpu, _ := cpu.CPUInfo()
+	host, _ := host.HostInfo()
+	load, _ := load.LoadAvg()
+	dockerids, _ := docker.GetDockerIDList()
+	//disk, _ := disk.DiskUsageStat()
+	return PostData{
+		Memory: memory,
+		CPU:    cpu,
+		Host:   host,
+		Load:   load,
+		//	Disk:      disk,
+		DockerIds: dockerids,
+	}
+}
 
 func startAgent(c Config) {
 	log.Debug("Starting cata agent")
@@ -16,8 +49,10 @@ func startAgent(c Config) {
 		for _, console := range c.Consoles {
 			url := strings.Join([]string{"http://", console, ":", c.ConsolePort}, "")
 			log.Debug("POSTing to URL: ", url)
-			jsonStr := []byte(`{"title":"Buy cheese and bread for breakfast."}`)
-			req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+			// JSON Post
+			json, _ := json.Marshal(getData())
+			log.Debug("POST ", json)
+			req, err := http.NewRequest("POST", url, bytes.NewBuffer(json))
 			req.Header.Set("X-Custom-Header", "myvalue")
 			req.Header.Set("Content-Type", "application/json")
 

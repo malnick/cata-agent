@@ -43,7 +43,7 @@ func getData() *postData {
 }
 
 func startAgent(c Config) {
-	log.Debug("Starting cata agent")
+	log.Info("Starting cata agent")
 	for {
 	Inner:
 		for _, console := range c.Consoles {
@@ -69,6 +69,6 @@ func startAgent(c Config) {
 			body, _ := ioutil.ReadAll(resp.Body)
 			log.Debug("Response Body: ", body)
 		}
-		time.Sleep(time.Minute * 1)
+		time.Sleep(2 * time.Minute)
 	}
 }

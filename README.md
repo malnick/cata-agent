@@ -14,6 +14,10 @@ Cata-agents can be configured with host-level alarms using environment variables
 
   Defualt is ```localhost```.
 
+```CATA_CONSOLE_PORT=```: string
+
+  A string to define the port the console listens on. Applied to all consoles in list. Defaults to 9000.
+
 ```CATA_POST_SPLAY=```: int
 
   An integer representing POST splay in minutes. Default is 5.

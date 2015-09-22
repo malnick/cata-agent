@@ -21,6 +21,7 @@ type Config struct {
 	Alarms      []Alarm  `json:"alarms"`
 	Consoles    []string `json:"consoles"`
 	ConsolePort string   `json:"console_port"`
+	SplayTime   string   `json:"splay_time"`
 }
 
 func ParseEnv(c Config) Config {
@@ -28,6 +29,7 @@ func ParseEnv(c Config) Config {
 	matchEnv, _ := regexp.Compile("CATA_ALARM_*")
 	matchConsole, _ := regexp.Compile("CATA_CONSOLES=*")
 	matchPort, _ := regexp.Compile("CATA_CONSOLE_PORT=*")
+	matchSplay, _ := regexp.Compile("CATA_SPLAY_TIME=*")
 	// Parse the env for our config
 	for _, e := range os.Environ() {
 		if matchEnv.MatchString(e) {
@@ -56,6 +58,10 @@ func ParseEnv(c Config) Config {
 			log.Debug("Port match found: ", e)
 			c.ConsolePort = strings.Split(e, "=")[1]
 		}
+		if matchSplay.MatchString(e) {
+			log.Debug("Splay time found in ENV: ", e)
+			c.SplayTime = strings.Split(e, "=")[1]
+		}
 	}
 	// If the consoles were not passed, set a default
 	if len(c.Consoles) < 1 {
@@ -66,6 +72,10 @@ func ParseEnv(c Config) Config {
 	if len(c.ConsolePort) < 1 {
 		log.Debug("Port match empty, setting default to 9000")
 		c.ConsolePort = "9000"
+	}
+	if len(c.SplayTime) > 0 {
+		log.Debug("Splay not found in env, setting default to 2m")
+		c.SplayTime = "2m"
 	}
 	return c
 }

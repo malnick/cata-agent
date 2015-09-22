@@ -28,6 +28,7 @@ func startAgent(c Config) {
 				continue Inner
 			}
 			defer resp.Body.Close() // Sleep for 1 minute before next POST
+			log.Info("Successful POST to ", url)
 			log.Debug("Response Status: ", resp.Status)
 			log.Debug("Response Headers: ", resp.Header)
 			body, _ := ioutil.ReadAll(resp.Body)

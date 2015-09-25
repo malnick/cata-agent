@@ -16,8 +16,20 @@ type Config struct {
 	EnableApi   string   `json:"enable_api"`
 }
 
+// Defaults
+var DefaultConsoles = "localhost"
+var DefaultPort = "9000"
+var DefaultEnableApi = "true"
+var DefaultSplayTime = "2m"
+
 // ParseEnv parses the agent environ and gets CATA_* specific data
 func ParseEnv(c Config) Config {
+	// Set defaults, override later
+	c.ConsolePort = DefaultPort
+	c.EnableApi = DefaultEnableApi
+	c.SplayTime = DefaultSplayTime
+	c.Consoles = append(c.Consoles, "localhost")
+
 	// Create a few matches for our env parsing down the road
 	matchConsole, _ := regexp.Compile("CATA_CONSOLES=*")
 	matchPort, _ := regexp.Compile("CATA_CONSOLE_PORT=*")
@@ -34,36 +46,24 @@ func ParseEnv(c Config) Config {
 			for _, console := range consolesAry {
 				c.Consoles = append(c.Consoles, string(console))
 			}
-		} else {
-			log.Debug("Consoles: localhost")
-			c.Consoles = append(c.Consoles, "localhost")
 		}
 
 		// Cata console port
 		if matchPort.MatchString(e) {
 			log.Debug("Console Port: ", e)
 			c.ConsolePort = strings.Split(e, "=")[1]
-		} else {
-			log.Debug("Console port: 9000")
-			c.ConsolePort = "9000"
 		}
 
 		// Splay time configuration
 		if matchSplay.MatchString(e) {
 			log.Debug("Splay Time ENV: ", e)
 			c.SplayTime = strings.Split(e, "=")[1]
-		} else {
-			log.Debug("Splay time default: 2m")
-			c.SplayTime = "2m"
 		}
 
 		// Enable agent REST API
 		if matchApiBool.MatchString(e) {
 			log.Debug("API Enable: ", e)
 			c.EnableApi = strings.Split(e, "=")[1]
-		} else {
-			log.Debug("API Enable: true")
-			c.EnableApi = "true"
 		}
 	}
 

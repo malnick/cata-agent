@@ -29,6 +29,8 @@ func ParseEnv(c Config) Config {
 	c.EnableApi = DefaultEnableApi
 	c.SplayTime = DefaultSplayTime
 	c.Consoles = append(c.Consoles, "localhost")
+	// Name needs to be set to hostname - TODO
+	//c.Name = getHostname()?
 
 	// Create a few matches for our env parsing down the road
 	matchConsole, _ := regexp.Compile("CATA_CONSOLES=*")

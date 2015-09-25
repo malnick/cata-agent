@@ -1,0 +1,32 @@
+{
+  "memory": {
+    "total": 17179869184,
+    "available": 3133874176,
+    "used": 16420646912,
+    "used_percent": 81.75845146179199,
+    "free": 759222272,
+    "active": 4101586944,
+    "inactive": 1504202752,
+    "buffers": 0,
+    "cached": 2374651904,
+    "wired": 9802788864,
+    "shared": 0
+  },
+  "cpu": null,
+  "host": {
+    "hostname": "Bohr.local",
+    "uptime": 1443026683,
+    "procs": 0,
+    "os": "darwin",
+    "platform": "darwin",
+    "platform_family": "",
+    "platform_version": "14.1.0",
+    "virtualization_system": "",
+    "virtualization_role": ""
+  },
+  "load": {
+    "load1": 2.08,
+    "load5": 2.12,
+    "load15": 1.96
+  }
+}

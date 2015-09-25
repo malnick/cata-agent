@@ -8,3 +8,7 @@
 
 1. `CATA_AGENT_API`: Boolean - enable or disable the REST interface
 1. `CATA_AGENT_PI_$NAME`: Enable or disable specific plugins for things like mysql etc
+
+## Refactor
+
+1. Break utils out into basic agent main pkg

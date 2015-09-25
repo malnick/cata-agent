@@ -22,6 +22,10 @@ Cata-agents can be configured with host-level alarms using environment variables
 
   An integer representing POST splay in minutes. Default is 5.
 
+```CATA_CHECKS=```: []string 
+
+  An array of checks to perform on the host system. Available options are: memory, cpu, load, host (host info). Defaults: [memory, load, host]
+
 ## Alarms - NOT FULLY IMPLEMENTED
 Alarms can be set with env variables, executed with the docker daemon as such:
 

@@ -25,32 +25,37 @@ type postData struct {
 	//DockerIds []string `json:"docker_ids"`
 }
 
-func getData() *postData {
-	memory, _ := mem.VirtualMemory()
-	cpu, _ := cpu.CPUInfo()
-	host, _ := host.HostInfo()
-	load, _ := load.LoadAvg()
-	//dockerids, _ := docker.GetDockerIDList()
-	//disk, _ := disk.DiskUsageStat()
-	return &postData{
-		Memory: memory,
-		CPU:    cpu,
-		Host:   host,
-		Load:   load,
-		//	Disk:      disk,
-		//DockerIds: dockerids,
+func getData(c Config) postData {
+	var p postData
+	for _, check := range c.Checks {
+		switch check {
+		case "memory":
+			mem, _ := mem.VirtualMemory()
+			p.Memory = mem
+		case "cpu":
+			cpu, _ := cpu.CPUInfo()
+			p.CPU = cpu
+		case "host":
+			host, _ := host.HostInfo()
+			p.Host = host
+		case "load":
+			load, _ := load.LoadAvg()
+			p.Load = load
+			//dockerids, _ := docker.GetDockerIDList()
+			//disk, _ := disk.DiskUsageStat()
+		}
 	}
+	return p
 }
 
 func startAgent(c Config) {
-	log.Info("Starting cata agent")
 	for {
 	Inner:
 		for _, console := range c.Consoles {
 			url := strings.Join([]string{"http://", console, ":", c.ConsolePort, "/agent"}, "")
 			log.Debug("POSTing to URL: ", url)
 			// JSON Post
-			json, _ := json.Marshal(getData())
+			json, _ := json.Marshal(getData(c))
 			log.Debug("POST ", string(json))
 			req, err := http.NewRequest("POST", url, bytes.NewBuffer(json))
 			req.Header.Set("X-Custom-Header", "myvalue")

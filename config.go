@@ -31,6 +31,7 @@ func ParseEnv(c Config) Config {
 	c.EnableApi = DefaultEnableApi
 	c.SplayTime = DefaultSplayTime
 	c.Consoles = append(c.Consoles, "localhost")
+	c.Checks = DefaultChecks
 	// Name needs to be set to hostname - TODO
 	//c.Name = getHostname()?
 

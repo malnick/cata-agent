@@ -14,6 +14,7 @@ type Config struct {
 	ConsolePort string   `json:"console_port"`
 	SplayTime   string   `json:"splay_time"`
 	EnableApi   string   `json:"enable_api"`
+	Checks      []string `json:"checks"`
 }
 
 // Defaults
@@ -21,6 +22,7 @@ var DefaultConsoles = "localhost"
 var DefaultPort = "9000"
 var DefaultEnableApi = "true"
 var DefaultSplayTime = "2m"
+var DefaultChecks = []string{"memory", "host", "load"}
 
 // ParseEnv parses the agent environ and gets CATA_* specific data
 func ParseEnv(c Config) Config {
@@ -37,6 +39,8 @@ func ParseEnv(c Config) Config {
 	matchPort, _ := regexp.Compile("CATA_CONSOLE_PORT=*")
 	matchSplay, _ := regexp.Compile("CATA_SPLAY_TIME=*")
 	matchApiBool, _ := regexp.Compile("CATA_ENABLE_API=*")
+	matchChecks, _ := regexp.Compile("CATA_CHECKS=*")
+
 	// Parse the env for our config
 	log.Debug("Setting ENV configuration..")
 	for _, e := range os.Environ() {
@@ -66,6 +70,15 @@ func ParseEnv(c Config) Config {
 		if matchApiBool.MatchString(e) {
 			log.Debug("API Enable: ", e)
 			c.EnableApi = strings.Split(e, "=")[1]
+		}
+
+		// Which checks to perform
+		if matchChecks.MatchString(e) {
+			log.Debug("Checks: ", e)
+			for _, check := range strings.Split(strings.Split(e, "=")[1], ",") {
+				log.Debug("Enabling check ", e)
+				c.Checks = append(c.Checks, check)
+			}
 		}
 	}
 

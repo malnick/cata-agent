@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	log "github.com/Sirupsen/logrus"
-	utils "github.com/malnick/cata-agent/utils"
+	//	utils "github.com/malnick/cata-agent/utils"
 	"net/http"
 )
 
@@ -17,7 +17,7 @@ func indexContainer(w http.ResponseWriter, r *http.Request) {
 // The host index
 func indexHost(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Requets for /host index")
-	hostinfo := utils.HostInfo()
+	hostinfo := HostInfo()
 	if err := json.NewEncoder(w).Encode(hostinfo); err != nil {
 		log.Debug("Failed to encode host info to json")
 	}
@@ -26,7 +26,7 @@ func indexHost(w http.ResponseWriter, r *http.Request) {
 // Memory route
 func routeHostMemory(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request to /host/memory route")
-	mem := utils.Memory()
+	mem := HostMemory()
 	if err := json.NewEncoder(w).Encode(mem); err != nil {
 		log.Debug("Failed to encode json for memory")
 	}
@@ -35,7 +35,7 @@ func routeHostMemory(w http.ResponseWriter, r *http.Request) {
 // CPU route
 func routeHostCpu(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request to /host/cpu route")
-	cpu := utils.Cpu()
+	cpu := HostCpu()
 	if err := json.NewEncoder(w).Encode(cpu); err != nil {
 		log.Debug("Failed to encode json for cpu")
 	}
@@ -44,7 +44,7 @@ func routeHostCpu(w http.ResponseWriter, r *http.Request) {
 // Host load
 func routeHostLoad(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request to /host/load route")
-	load := utils.Load()
+	load := HostLoad()
 	if err := json.NewEncoder(w).Encode(load); err != nil {
 		log.Debug("Failed to encode json for load")
 	}

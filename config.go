@@ -51,7 +51,7 @@ func ParseEnv(c Config) Config {
 			log.Debug("Consoles: ", e)
 			consolesAry := strings.Split(strings.Split(e, "=")[1], ",")
 			for _, console := range consolesAry {
-				c.Consoles = append(c.Consoles, string(console))
+				c.Consoles = []string{string(console)}
 			}
 		}
 

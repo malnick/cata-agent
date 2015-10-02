@@ -2,10 +2,10 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	log "github.com/Sirupsen/logrus"
 	"github.com/malnick/gopsutil/cpu"
 	//"github.com/malnick/gopsutil/disk"
-	"encoding/json"
 	//	"github.com/malnick/gopsutil/docker"
 	"github.com/malnick/gopsutil/host"
 	"github.com/malnick/gopsutil/load"
@@ -21,7 +21,7 @@ type postData struct {
 	CPU    []cpu.CPUInfoStat      `json:"cpu"`
 	Host   *host.HostInfoStat     `json:"host"`
 	Load   *load.LoadAvgStat      `json:"load"`
-	//Disk      *disk.DiskUsageStat    `json:"disk"`
+	//Disk   *disk.DiskUsageStat    `json:"disk"`
 	//DockerIds []string `json:"docker_ids"`
 }
 
@@ -42,7 +42,9 @@ func getData(c Config) postData {
 			load, _ := load.LoadAvg()
 			p.Load = load
 			//dockerids, _ := docker.GetDockerIDList()
-			//disk, _ := disk.DiskUsageStat()
+			//case "disk":
+			//	disk, _ := disk.DiskUsageStat()
+			//	p.Disk = disk
 		}
 	}
 	return p

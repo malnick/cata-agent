@@ -24,7 +24,7 @@ var DefaultEnableApi = "true"
 var DefaultSplayTime = "2m"
 var DefaultChecks = []string{"memory", "host", "load"}
 
-// ParseEnv parses the agent environ and gets CATA_* specific data
+// ParseEnv parses the agent environ and gets kata_* specific data
 func ParseEnv(c Config) Config {
 	// Set defaults, override later
 	c.ConsolePort = DefaultPort
@@ -36,17 +36,17 @@ func ParseEnv(c Config) Config {
 	//c.Name = getHostname()?
 
 	// Create a few matches for our env parsing down the road
-	matchConsole, _ := regexp.Compile("CATA_CONSOLES=*")
-	matchPort, _ := regexp.Compile("CATA_CONSOLE_PORT=*")
-	matchSplay, _ := regexp.Compile("CATA_SPLAY_TIME=*")
-	matchApiBool, _ := regexp.Compile("CATA_ENABLE_API=*")
-	matchChecks, _ := regexp.Compile("CATA_CHECKS=*")
+	matchConsole, _ := regexp.Compile("KATA_CONSOLES=*")
+	matchPort, _ := regexp.Compile("KATA_CONSOLE_PORT=*")
+	matchSplay, _ := regexp.Compile("KATA_SPLAY_TIME=*")
+	matchApiBool, _ := regexp.Compile("KATA_ENABLE_API=*")
+	matchChecks, _ := regexp.Compile("KATA_CHECKS=*")
 
 	// Parse the env for our config
 	log.Debug("Setting ENV configuration..")
 	for _, e := range os.Environ() {
 
-		// Cata consoles to report to
+		// kata consoles to report to
 		if matchConsole.MatchString(e) {
 			log.Debug("Consoles: ", e)
 			consolesAry := strings.Split(strings.Split(e, "=")[1], ",")
@@ -55,7 +55,7 @@ func ParseEnv(c Config) Config {
 			}
 		}
 
-		// Cata console port
+		// kata console port
 		if matchPort.MatchString(e) {
 			log.Debug("Console Port: ", e)
 			c.ConsolePort = strings.Split(e, "=")[1]

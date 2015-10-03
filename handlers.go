@@ -55,6 +55,6 @@ func Index(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request for / index")
 	config := ParseConfig()
 	if err := json.NewEncoder(w).Encode(config); err != nil {
-		log.Debug("Failed to encode configuration for cata agent")
+		log.Debug("Failed to encode configuration for kata agent")
 	}
 }

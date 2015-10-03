@@ -17,7 +17,7 @@ func main() {
 	flag.Parse()
 	// Parse the config here before doing anything else
 	config := ParseConfig()
-	log.Info("Starting Cata Agent")
+	log.Info("Starting Kata Agent")
 	// Start the agent
 	go startAgent(config)
 	// Run the router

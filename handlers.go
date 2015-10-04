@@ -50,6 +50,15 @@ func routeHostLoad(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Host disk
+func routeHostDisk(w http.ResponseWriter, r *http.Request) {
+	log.Debug("Request to /host/disk route")
+	disk := HostDisk()
+	if err := json.NewEncoder(w).Encode(disk); err != nil {
+		log.Debug("Failed to encode json for load")
+	}
+}
+
 // The root index
 func Index(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request for / index")

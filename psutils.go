@@ -3,9 +3,11 @@ package main
 import (
 	//	log "github.com/Sirupsen/logrus"
 	"github.com/malnick/gopsutil/cpu"
+	"github.com/malnick/gopsutil/disk"
 	"github.com/malnick/gopsutil/host"
 	"github.com/malnick/gopsutil/load"
 	"github.com/malnick/gopsutil/mem"
+	"github.com/malnick/gopsutil/net"
 )
 
 func HostInfo() *host.HostInfoStat {
@@ -26,4 +28,19 @@ func HostCpu() []cpu.CPUInfoStat {
 func HostLoad() *load.LoadAvgStat {
 	l, _ := load.LoadAvg()
 	return l
+}
+
+func HostDisk() *disk.DiskUsageStat {
+	d, _ := disk.DiskUsage("/")
+	return d
+}
+
+func HostNetio() []net.NetIOCountersStat {
+	net, _ := net.NetIOCounters(true)
+	return net
+}
+
+func HostNetcon() []net.NetConnectionStat {
+	net, _ := net.NetConnections("inet")
+	return net
 }

@@ -43,4 +43,22 @@ var routes = Routes{
 		"/host/load",
 		routeHostLoad,
 	},
+	Route{
+		"HostDisk",
+		"GET",
+		"/host/disk",
+		routeHostDisk,
+	},
+	Route{
+		"HostNetio",
+		"GET",
+		"/host/netio",
+		routeHostNetio,
+	},
+	Route{
+		"HostNetcon",
+		"GET",
+		"/host/netcon",
+		routeHostNetcon,
+	},
 }

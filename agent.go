@@ -5,11 +5,11 @@ import (
 	"encoding/json"
 	log "github.com/Sirupsen/logrus"
 	"github.com/malnick/gopsutil/cpu"
-	//"github.com/malnick/gopsutil/disk"
-	//	"github.com/malnick/gopsutil/docker"
+	"github.com/malnick/gopsutil/disk"
 	"github.com/malnick/gopsutil/host"
 	"github.com/malnick/gopsutil/load"
 	"github.com/malnick/gopsutil/mem"
+	"github.com/malnick/gopsutil/net"
 	"io/ioutil"
 	"net/http"
 	"strings"
@@ -17,11 +17,13 @@ import (
 )
 
 type postData struct {
-	Memory *mem.VirtualMemoryStat `json:"memory"`
-	CPU    []cpu.CPUInfoStat      `json:"cpu"`
-	Host   *host.HostInfoStat     `json:"host"`
-	Load   *load.LoadAvgStat      `json:"load"`
-	//Disk   *disk.DiskUsageStat    `json:"disk"`
+	Memory *mem.VirtualMemoryStat  `json:"memory"`
+	CPU    []cpu.CPUInfoStat       `json:"cpu"`
+	Host   *host.HostInfoStat      `json:"host"`
+	Load   *load.LoadAvgStat       `json:"load"`
+	Disk   *disk.DiskUsageStat     `json:"disk"`
+	Netio  []net.NetIOCountersStat `json:"netio"`
+	Netcon []net.NetConnectionStat `json:"netcon"`
 	//DockerIds []string `json:"docker_ids"`
 }
 
@@ -42,9 +44,15 @@ func getData(c Config) postData {
 			load, _ := load.LoadAvg()
 			p.Load = load
 			//dockerids, _ := docker.GetDockerIDList()
-			//case "disk":
-			//	disk, _ := disk.DiskUsageStat()
-			//	p.Disk = disk
+		case "disk":
+			disk, _ := disk.DiskUsage("/")
+			p.Disk = disk
+		case "netio":
+			net, _ := net.NetIOCounters(true)
+			p.Netio = net
+		case "netcon":
+			net, _ := net.NetConnections("inet")
+			p.Netcon = net
 		}
 	}
 	return p

@@ -22,7 +22,7 @@ var DefaultConsoles = "localhost"
 var DefaultPort = "9000"
 var DefaultEnableApi = "true"
 var DefaultSplayTime = "2m"
-var DefaultChecks = []string{"memory", "host", "load"}
+var DefaultChecks = []string{"memory", "host", "load", "disk", "netio", "netcon"}
 
 // ParseEnv parses the agent environ and gets kata_* specific data
 func ParseEnv(c Config) Config {

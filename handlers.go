@@ -59,6 +59,24 @@ func routeHostDisk(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// Host netio
+func routeHostNetio(w http.ResponseWriter, r *http.Request) {
+	log.Debug("Request to /host/netio route")
+	net := HostNetio()
+	if err := json.NewEncoder(w).Encode(net); err != nil {
+		log.Debug("Failed to encode json for load")
+	}
+}
+
+// Host netcon
+func routeHostNetcon(w http.ResponseWriter, r *http.Request) {
+	log.Debug("Request to /host/netio route")
+	net := HostNetcon()
+	if err := json.NewEncoder(w).Encode(net); err != nil {
+		log.Debug("Failed to encode json for load")
+	}
+}
+
 // The root index
 func Index(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request for / index")

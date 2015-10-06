@@ -46,12 +46,12 @@ func HostNetcon() []net.NetConnectionStat {
 	return net
 }
 
-func HostDocker() map[string]*cpu.CPUTimesStat {
-	returnDockerData := make(map[string]*cpu.CPUTimesStat)
+func HostDocker() map[string]string {
+	returnDockerData := make(map[string]string)
 	dock, _ := docker.GetDockerIDList()
 	for _, id := range dock {
 		v, _ := docker.CgroupCPUDocker(id)
-		returnDockerData[id] = v
+		returnDockerData[id] = v.CPU
 	}
 	return returnDockerData
 }

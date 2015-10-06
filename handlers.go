@@ -80,8 +80,8 @@ func routeHostNetcon(w http.ResponseWriter, r *http.Request) {
 // Host docker
 func routeHostDocker(w http.ResponseWriter, r *http.Request) {
 	log.Debug("Request to /host/docker route")
-	net := HostNetcon()
-	if err := json.NewEncoder(w).Encode(net); err != nil {
+	dock := HostDocker()
+	if err := json.NewEncoder(w).Encode(dock); err != nil {
 		log.Debug("Failed to encode json for load")
 	}
 }

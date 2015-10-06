@@ -4,7 +4,6 @@ import (
 	//	log "github.com/Sirupsen/logrus"
 	"github.com/malnick/gopsutil/cpu"
 	"github.com/malnick/gopsutil/disk"
-	"github.com/malnick/gopsutil/docker"
 	"github.com/malnick/gopsutil/host"
 	"github.com/malnick/gopsutil/load"
 	"github.com/malnick/gopsutil/mem"
@@ -44,14 +43,4 @@ func HostNetio() []net.NetIOCountersStat {
 func HostNetcon() []net.NetConnectionStat {
 	net, _ := net.NetConnections("inet")
 	return net
-}
-
-func HostDocker() map[string]string {
-	returnDockerData := make(map[string]string)
-	dock, _ := docker.GetDockerIDList()
-	for _, id := range dock {
-		v, _ := docker.CgroupCPUDocker(id)
-		returnDockerData[id] = v.CPU
-	}
-	return returnDockerData
 }

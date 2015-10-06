@@ -61,10 +61,4 @@ var routes = Routes{
 		"/host/netcon",
 		routeHostNetcon,
 	},
-	Route{
-		"HostDocker",
-		"GET",
-		"/host/docker",
-		routeHostDocker,
-	},
 }

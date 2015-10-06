@@ -6,7 +6,6 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/malnick/gopsutil/cpu"
 	"github.com/malnick/gopsutil/disk"
-	"github.com/malnick/gopsutil/docker"
 	"github.com/malnick/gopsutil/host"
 	"github.com/malnick/gopsutil/load"
 	"github.com/malnick/gopsutil/mem"
@@ -25,7 +24,6 @@ type postData struct {
 	Disk   *disk.DiskUsageStat     `json:"disk"`
 	Netio  []net.NetIOCountersStat `json:"netio"`
 	Netcon []net.NetConnectionStat `json:"netcon"`
-	Docker map[string]string       `json:"docker"`
 }
 
 func getData(c Config) postData {
@@ -54,20 +52,6 @@ func getData(c Config) postData {
 		case "netcon":
 			net, _ := net.NetConnections("inet")
 			p.Netcon = net
-		case "docker":
-			returnDockerData := make(map[string]string)
-			dock, _ := docker.GetDockerIDList()
-			for _, id := range dock {
-				v, err := docker.CgroupCPUDocker(id)
-				if err != nil {
-					log.Error("error %v", err)
-				}
-				if v.CPU == "" {
-					log.Error("could not get CgroupCPU %v", v)
-				}
-				returnDockerData[id] = v.CPU
-			}
-			p.Docker = returnDockerData
 		}
 	}
 	return p

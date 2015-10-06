@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	log "github.com/Sirupsen/logrus"
-	//	utils "github.com/malnick/cata-agent/utils"
 	"net/http"
 )
 

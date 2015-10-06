@@ -6,6 +6,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/malnick/gopsutil/cpu"
 	"github.com/malnick/gopsutil/disk"
+	"github.com/malnick/gopsutil/docker"
 	"github.com/malnick/gopsutil/host"
 	"github.com/malnick/gopsutil/load"
 	"github.com/malnick/gopsutil/mem"
@@ -17,14 +18,14 @@ import (
 )
 
 type postData struct {
-	Memory *mem.VirtualMemoryStat  `json:"memory"`
-	CPU    []cpu.CPUInfoStat       `json:"cpu"`
-	Host   *host.HostInfoStat      `json:"host"`
-	Load   *load.LoadAvgStat       `json:"load"`
-	Disk   *disk.DiskUsageStat     `json:"disk"`
-	Netio  []net.NetIOCountersStat `json:"netio"`
-	Netcon []net.NetConnectionStat `json:"netcon"`
-	//DockerIds []string `json:"docker_ids"`
+	Memory    *mem.VirtualMemoryStat  `json:"memory"`
+	CPU       []cpu.CPUInfoStat       `json:"cpu"`
+	Host      *host.HostInfoStat      `json:"host"`
+	Load      *load.LoadAvgStat       `json:"load"`
+	Disk      *disk.DiskUsageStat     `json:"disk"`
+	Netio     []net.NetIOCountersStat `json:"netio"`
+	Netcon    []net.NetConnectionStat `json:"netcon"`
+	DockerIds []string                `json:"docker_ids"`
 }
 
 func getData(c Config) postData {
@@ -53,6 +54,9 @@ func getData(c Config) postData {
 		case "netcon":
 			net, _ := net.NetConnections("inet")
 			p.Netcon = net
+		case "docker":
+			dock, _ := docker.GetDockerIDList()
+			p.DockerIds = dock
 		}
 	}
 	return p

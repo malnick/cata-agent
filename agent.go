@@ -18,14 +18,14 @@ import (
 )
 
 type postData struct {
-	Memory    *mem.VirtualMemoryStat  `json:"memory"`
-	CPU       []cpu.CPUInfoStat       `json:"cpu"`
-	Host      *host.HostInfoStat      `json:"host"`
-	Load      *load.LoadAvgStat       `json:"load"`
-	Disk      *disk.DiskUsageStat     `json:"disk"`
-	Netio     []net.NetIOCountersStat `json:"netio"`
-	Netcon    []net.NetConnectionStat `json:"netcon"`
-	DockerIds []string                `json:"docker_ids"`
+	Memory *mem.VirtualMemoryStat  `json:"memory"`
+	CPU    []cpu.CPUInfoStat       `json:"cpu"`
+	Host   *host.HostInfoStat      `json:"host"`
+	Load   *load.LoadAvgStat       `json:"load"`
+	Disk   *disk.DiskUsageStat     `json:"disk"`
+	Netio  []net.NetIOCountersStat `json:"netio"`
+	Netcon []net.NetConnectionStat `json:"netcon"`
+	Docker map[string]string       `json:"docker"`
 }
 
 func getData(c Config) postData {
@@ -55,8 +55,19 @@ func getData(c Config) postData {
 			net, _ := net.NetConnections("inet")
 			p.Netcon = net
 		case "docker":
+			returnDockerData := make(map[string]string)
 			dock, _ := docker.GetDockerIDList()
-			p.DockerIds = dock
+			for _, id := range dock {
+				v, err := docker.CgroupCPUDocker(id)
+				if err != nil {
+					log.Error("error %v", err)
+				}
+				if v.CPU == "" {
+					log.Error("could not get CgroupCPU %v", v)
+				}
+				returnDockerData[id] = v.CPU
+			}
+			p.Docker = returnDockerData
 		}
 	}
 	return p
